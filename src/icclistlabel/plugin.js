@@ -81,23 +81,25 @@ import {toggleWidgetState} from "../../../ckeditor-iccexception-plugin/src/commo
                         editor.on(
                             'key', ({data: {keyCode, domEvent}, cancel}) => {
                                 // Check if target element matches this widget's element.
-                                if (this.element.equals(domEvent.getTarget())) {
-                                    // Check if delete or backspace was pressed.
+                                if(this.element && this.element !== undefined && this.element.length) {
+                                    if (this.element.equals(domEvent.getTarget())) {
+                                        // Check if delete or backspace was pressed.
 
-                                    if (keyCode === keycode('delete') || keyCode === keycode('backspace')) {
-                                        const selection = this.editor.getSelection()
-                                        /** @type {CKEDITOR.dom.range} range */
-                                        let range = selection.getRanges()[0];
+                                        if (keyCode === keycode('delete') || keyCode === keycode('backspace')) {
+                                            const selection = this.editor.getSelection()
+                                            /** @type {CKEDITOR.dom.range} range */
+                                            let range = selection.getRanges()[0];
 
-                                        if (!range || !range.collapsed) {
-                                            return;
-                                        }
+                                            if (!range || !range.collapsed) {
+                                                return;
+                                            }
 
-                                        range = replaceRangeWithClosestEditableRoot(range, this.element);
+                                            range = replaceRangeWithClosestEditableRoot(range, this.element);
 
-                                        // If backspace is going to remove the label element, cancel the event.
-                                        if (range.checkStartOfBlock() && range.getPreviousNode().equals(this.element)) {
-                                            cancel();
+                                            // If backspace is going to remove the label element, cancel the event.
+                                            if (range.checkStartOfBlock() && range.getPreviousNode().equals(this.element)) {
+                                                cancel();
+                                            }
                                         }
                                     }
                                 }
