@@ -1,6 +1,6 @@
 /*global CKEDITOR*/
 import keycode from 'keycode'
-import {toggleWidgetState} from "../../../ckeditor-iccexception-plugin/src/common/common";
+import {toggleWidgetState} from "../common/common";
 
 ((() => {
     let title = 'icclistlabel';
