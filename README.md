@@ -2,6 +2,14 @@
 
 # Setup
 
+First, install encore and dependenices (builds `node_modules` folder).
+
+```bash
+$ yarn add @symfony/webpack-encore --dev
+```
+
+Build the plugin (creates the `dist` folder with all files).
+
 ```bash
 $ yarn run encore dev
 ```
