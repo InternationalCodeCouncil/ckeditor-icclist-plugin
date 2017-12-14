@@ -332,13 +332,7 @@ class IccListPlugin {
             return
         }
 
-        const parent = listNode.$.parentNode;
-        const update = $(parent).hasClass('dont-renumber') ? false : true;
-
-        if (!update) {
-            //return;
-        }
-
+        const update = $(listNode.$).closest('div.list').hasClass('dont-renumber') ? false : true;
         const length = listNode.getChildCount();
 
         // Try to determine the ordinal type.
@@ -387,7 +381,13 @@ class IccListPlugin {
                     ? this.getSectionPrefix(child, doc, labelParts.prefix, indent)
                     : ''
 
-                labelNode.appendText(this.updateLabel(labelParts, newPrefix, newOrdinal))
+                if (update) {
+                    labelNode.appendText(this.updateLabel(labelParts, newPrefix, newOrdinal));
+                }
+                else {
+                    labelNode.appendText(this.updateLabel(labelParts, '', ''));
+                }
+
                 if (pNode.getFirst()) {
                     labelNode.insertBefore(pNode.getFirst())
                 } else {
@@ -398,12 +398,14 @@ class IccListPlugin {
                 textNode.insertAfter(labelNode)
             }
 
-            const childrenCount = child.getChildCount()
-            for (let k = 0; k < childrenCount; k++) {
-                if (child.getChild(k).is('ol')) {
-                    this.updateOrderedListLabels(child.getChild(k), doc, editor)
-                } else if (child.getChild(k).is('ul')) {
-                    this.updateUnorderedListLabels(child.getChild(k), doc, editor)
+            if(update) {
+                const childrenCount = child.getChildCount()
+                for (let k = 0; k < childrenCount; k++) {
+                    if (child.getChild(k).is('ol')) {
+                        this.updateOrderedListLabels(child.getChild(k), doc, editor)
+                    } else if (child.getChild(k).is('ul')) {
+                        this.updateUnorderedListLabels(child.getChild(k), doc, editor)
+                    }
                 }
             }
         }
@@ -411,10 +413,8 @@ class IccListPlugin {
 
     updateListLabels(listNode, doc, editor, indent = false) {
         if (listNode.is('ol')) {
-            console.log('ol');
             this.updateOrderedListLabels(listNode, doc, editor, indent)
         } else if (listNode.is('ul')) {
-            console.log('ul');
             this.updateUnorderedListLabels(listNode, doc, editor)
         } else {
             throw new Error('Node is not a list.')
