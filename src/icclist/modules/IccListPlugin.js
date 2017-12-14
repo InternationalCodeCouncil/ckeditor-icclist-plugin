@@ -332,7 +332,14 @@ class IccListPlugin {
             return
         }
 
-        const length = listNode.getChildCount()
+        const parent = listNode.$.parentNode;
+        const update = $(parent).hasClass('dont-renumber') ? false : true;
+
+        if (!update) {
+            //return;
+        }
+
+        const length = listNode.getChildCount();
 
         // Try to determine the ordinal type.
         let ordinalType = listNode.getCustomData('listType')
@@ -343,12 +350,13 @@ class IccListPlugin {
         for (let i = 0; i < length; i++) {
             const child = listNode.getChild(i)
             const ascendantOrdinal = this.findAscendantOrdinal(child, doc)
+            let index = i + 1;
+            let newOrdinal;
 
-            let newOrdinal
             try {
-                newOrdinal = this.convertNumberToOrdinal(i + 1, ordinalType)
+                newOrdinal = this.convertNumberToOrdinal(index, ordinalType)
             } catch (e) {
-                newOrdinal = (i + 1).toString()
+                newOrdinal = index.toString()
             }
 
             let pNode = this.findOrCreateLabelNode(child, doc)
@@ -360,12 +368,21 @@ class IccListPlugin {
                     ? this.getSectionPrefix(child, doc, labelParts.prefix, indent)
                     : ''
 
-                labelNode.setHtml(this.updateLabel(labelParts, newPrefix, newOrdinal))
+                if (update) {
+                    labelNode.setHtml(this.updateLabel(labelParts, newPrefix, newOrdinal))
+                }
             } else {
-                labelNode = doc.createElement('span')
-                labelNode.addClass('label')
+                let labelParts;
+                labelNode = doc.createElement('span');
+                labelNode.addClass('label');
 
-                const labelParts = this.parseOrdinal(newOrdinal + '.')
+                if (update) {
+                    labelParts = this.parseOrdinal(newOrdinal + '.');
+                }
+                else {
+                    labelParts = this.parseOrdinal(1 + '.');
+                }
+
                 const newPrefix = ordinalType === ORDINAL_TYPE_SECTION
                     ? this.getSectionPrefix(child, doc, labelParts.prefix, indent)
                     : ''
@@ -394,8 +411,10 @@ class IccListPlugin {
 
     updateListLabels(listNode, doc, editor, indent = false) {
         if (listNode.is('ol')) {
+            console.log('ol');
             this.updateOrderedListLabels(listNode, doc, editor, indent)
         } else if (listNode.is('ul')) {
+            console.log('ul');
             this.updateUnorderedListLabels(listNode, doc, editor)
         } else {
             throw new Error('Node is not a list.')
