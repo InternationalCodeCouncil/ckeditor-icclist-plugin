@@ -218,6 +218,7 @@ export const createListNode = (doc, type) => {
   // todo: check if this is child list and skip inserting wrapper div.
   const divNode = doc.createElement('div')
   divNode.addClass('list')
+  divNode.addClass('dont-renumber')
   const listNode = doc.createElement(type)
   listNode.addClass('no_mark')
 
@@ -248,6 +249,7 @@ export const createListItemNode = (doc, type, index = 1, insertLabel = true) => 
     const labelNode = doc.createElement('span')
     labelNode.addClass('label')
     labelNode.appendText(`${index}.`)
+
     // Add label to the paragraph node.
     labelNode.appendTo(paragraphNode)
 

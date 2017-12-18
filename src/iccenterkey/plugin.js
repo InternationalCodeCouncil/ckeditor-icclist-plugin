@@ -583,8 +583,12 @@
           block.breakParent(blockGrandParent)
         }
 
-        const parentList = blockGrandParent.getAscendant({ul: 1, ol: 1})
-        CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
+        const parentList = blockGrandParent.getAscendant({ul: 1, ol: 1});
+        const update = $(parentList.$).closest('div.list').hasClass('dont-renumber') ? false : true;
+
+        if(update) {
+            CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
+        }
       } else if (!needsBlock) {
         block.appendBogus(true)
 
@@ -618,8 +622,12 @@
             newSelectionTarget = placeholderNode
           }
 
-          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true)
-          CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
+          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true);
+          const update = $(parentList.$).closest('div.list').hasClass('dont-renumber') ? false : true;
+
+          if(update) {
+              CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor);
+          }
         } else {
           // If the empty block is neither first nor last child
           // then split the list and put all the block contents
@@ -650,14 +658,18 @@
           }
 
           const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true)
+          const update = $(parentList.$).closest('div.list').hasClass('dont-renumber') ? false : true;
 
-          if (isGrandParentListWrapper) {
-            nextList = nextList.findOne('ul, ol')
-          }
+          if(update) {
+              if (isGrandParentListWrapper) {
+                  nextList = nextList.findOne('ul, ol')
+              }
 
-          CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
-          if (nextList && (nextList.type === CKEDITOR.NODE_ELEMENT && (nextList.is('ul') || nextList.is('ol')))) {
-            CKEDITOR.plugins.list.updateListLabels(nextList, doc, editor)
+              CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor);
+
+              if (nextList && (nextList.type === CKEDITOR.NODE_ELEMENT && (nextList.is('ul') || nextList.is('ol')))) {
+                  CKEDITOR.plugins.list.updateListLabels(nextList, doc, editor)
+              }
           }
         }
 
@@ -700,10 +712,14 @@
         //  </ul>                      =>      </ul>
 
         if (firstChild || lastChild) {
-          newBlock[firstChild ? 'insertBefore' : 'insertAfter'](targetParentNode)
+          newBlock[firstChild ? 'insertBefore' : 'insertAfter'](targetParentNode);
 
-          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true)
-          CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
+          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true);
+          const update = $(parentList.$).closest('div.list').hasClass('dont-renumber') ? false : true;
+
+          if(update) {
+              CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
+          }
         } else {
           // If the empty block is neither first nor last child
           // then split the list and put the new block between
@@ -720,15 +736,19 @@
           let nextList = block.getNext()
           newBlock.insertAfter(targetParentNode)
 
-          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true)
+          const parentList = blockParent.getAscendant({ul: 1, ol: 1}, true);
+          const update = $(parentList.$).closest('div.list').hasClass('dont-renumber') ? false : true;
 
-          if (isGrandParentListWrapper) {
-            nextList = nextList.find('ul, ol')
-          }
+          if(update) {
+              if (isGrandParentListWrapper) {
+                  nextList = nextList.find('ul, ol');
+              }
 
-          CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor)
-          if (nextList.is('ul') || nextList.is('ol')) {
-            CKEDITOR.plugins.list.updateListLabels(nextList, doc, editor)
+              CKEDITOR.plugins.list.updateListLabels(parentList, doc, editor);
+
+              if (nextList.is('ul') || nextList.is('ol')) {
+                  CKEDITOR.plugins.list.updateListLabels(nextList, doc, editor);
+              }
           }
         }
 

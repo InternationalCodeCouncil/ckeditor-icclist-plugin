@@ -10,8 +10,9 @@ class IccListPluginConfiguration {
    * @constructor
    */
   constructor () {
-    this.icons = 'iccbulletedlist,iccnumberedlist'
-    this.hidpi = true
+    this.icons = 'iccbulletedlist,iccnumberedlist';
+    this.hidpi = true;
+    this.auto_label = false;
   }
 
   /**

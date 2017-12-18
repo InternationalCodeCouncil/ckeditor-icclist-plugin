@@ -161,7 +161,7 @@
 
       for (i = startItem.getCustomData('listarray_index'); i <= lastItem.getCustomData('listarray_index'); i++) {
         listArray[ i ].indent += indentOffset
-        // Make sure the newly created sublist get a brand-new element of the same type. (#5372)
+        // Make sure the newly created sublist get a brand-new element of the same type. (result5372)
         if (indentOffset > 0) {
           const listRoot = listArray[ i ].parent
           listArray[ i ].parent = new CKEDITOR.dom.element(listRoot.getName(), listRoot.getDocument())
@@ -227,7 +227,11 @@
               childListNodes[childIndex].type === CKEDITOR.NODE_ELEMENT &&
               (childListNodes[childIndex].is('ol') || childListNodes[childIndex].is('ul'))
             ) {
-              CKEDITOR.plugins.list.updateListLabels(childListNodes[childIndex], range.document, editor, that.isIndent)
+              const update = $(childListNodes[childIndex].$).closest('div.list').hasClass('dont-renumber') ? false : true;
+
+              if(update) {
+                CKEDITOR.plugins.list.updateListLabels(childListNodes[childIndex], range.document, editor, that.isIndent);
+              }
             }
           }
         }
@@ -269,7 +273,11 @@
         const parentListNode = parentLiElement.getAscendant({ul: 1, ol: 1})
 
         if (parentListNode) {
-          CKEDITOR.plugins.list.updateListLabels(parentListNode, range.document, editor)
+          const update = $(parentListNode.$).closest('div.list').hasClass('dont-renumber') ? false : true;
+
+          if(update) {
+              CKEDITOR.plugins.list.updateListLabels(parentListNode, range.document, editor)
+          }
         }
       }
 
