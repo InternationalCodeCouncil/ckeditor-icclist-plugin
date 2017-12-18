@@ -18,8 +18,6 @@ class IccListCommand {
    * @param {string} type
    */
   constructor (name, type) {
-    console.log('neww');
-
     this.name = name
     this.type = type
     this.context = type

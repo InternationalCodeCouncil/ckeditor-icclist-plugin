@@ -370,8 +370,6 @@ class IccListPlugin {
                 labelNode = doc.createElement('span');
                 labelNode.addClass('label');
 
-                console.log(newOrdinal);
-
                 if (update) {
                     labelParts = this.parseOrdinal(newOrdinal + '.');
                 }

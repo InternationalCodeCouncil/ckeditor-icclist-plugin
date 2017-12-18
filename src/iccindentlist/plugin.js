@@ -227,7 +227,6 @@
               childListNodes[childIndex].type === CKEDITOR.NODE_ELEMENT &&
               (childListNodes[childIndex].is('ol') || childListNodes[childIndex].is('ul'))
             ) {
-              console.log(childListNodes[childIndex]);
               const update = $(childListNodes[childIndex].$).closest('div.list').hasClass('dont-renumber') ? false : true;
 
               if(update) {
