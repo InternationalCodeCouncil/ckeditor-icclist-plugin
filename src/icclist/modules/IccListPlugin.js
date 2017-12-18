@@ -357,18 +357,20 @@ class IccListPlugin {
             let labelNode = pNode ? pNode.findOne('span.label') : null
 
             if (labelNode) {
-                const labelParts = this.parseOrdinal(labelNode.getHtml())
-                const newPrefix = ordinalType === ORDINAL_TYPE_SECTION
-                    ? this.getSectionPrefix(child, doc, labelParts.prefix, indent)
-                    : ''
-
                 if (update) {
+                    const labelParts = this.parseOrdinal(labelNode.getHtml())
+                    const newPrefix = ordinalType === ORDINAL_TYPE_SECTION
+                        ? this.getSectionPrefix(child, doc, labelParts.prefix, indent)
+                        : ''
+
                     labelNode.setHtml(this.updateLabel(labelParts, newPrefix, newOrdinal))
                 }
             } else {
                 let labelParts;
                 labelNode = doc.createElement('span');
                 labelNode.addClass('label');
+
+                console.log(newOrdinal);
 
                 if (update) {
                     labelParts = this.parseOrdinal(newOrdinal + '.');
@@ -398,7 +400,7 @@ class IccListPlugin {
                 textNode.insertAfter(labelNode)
             }
 
-            if(update) {
+            if (update) {
                 const childrenCount = child.getChildCount()
                 for (let k = 0; k < childrenCount; k++) {
                     if (child.getChild(k).is('ol')) {
